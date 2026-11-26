@@ -1,3 +1,4 @@
 # Core dependencies (installed by install.bat)
 PySide6>=6.6,<7
 playwright>=1.44,<2
+PyYAML>=6.0
