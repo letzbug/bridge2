@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "theme": "dark",
+  "demo_mode": false,
+  "host": {
+    "name": "Cameron",
+    "browser_backend": "managed",
+    "model_name": ""
+  },
+  "guest": {
+    "provider": "gemini",
+    "name": "Gem",
+    "url": "",
+    "browser_backend": "managed",
+    "mode": "text",
+    "model_name": ""
+  },
+  "conversation": {
+    "session_name": "",
+    "topic": "",
+    "research_question": "",
+    "initial_prompt": "Hello [recipient]. You are about to have a conversation with another AI assistant, [other]. A human researcher relays the messages between you with a research tool, and every relayed message is labelled with its sender.\n\nResearch topic: [topic]\n\nPlease open the conversation with a first thought or question for [other].",
+    "first_speaker": "host",
+    "max_rounds": 10,
+    "delay_seconds": 2.0,
+    "max_wait_seconds": 180,
+    "transfer_mode": "manual",
+    "attribution": true,
+    "record_transcript": true
+  },
+  "templates": {
+    "transfer": "Message from [speaker]:\n\n[original_message]",
+    "human": "[original_message]",
+    "human_name": "Human researcher"
+  },
+  "limits": {
+    "max_message_chars": 20000,
+    "min_interval_seconds": 2.0,
+    "max_messages_per_hour": 60,
+    "near_duplicate_threshold": 0.85
+  },
+  "research": {
+    "recording_enabled": true,
+    "experiment": "",
+    "condition": "",
+    "conversation_context": "",
+    "memory_setting": "",
+    "notes": ""
+  },
+  "automation_acknowledged": {},
+  "window": {
+    "layout": "with_panel",
+    "apply_layout_on_open": true,
+    "main_geometry": "",
+    "control_bar_geometry": "",
+    "control_bar_on_top": true
+  },
+  "shortcuts": {
+    "import_clipboard": "Ctrl+Shift+V",
+    "copy_outgoing": "Ctrl+Shift+C",
+    "mark_sent": "Ctrl+Shift+Return",
+    "emergency_stop": "Ctrl+Shift+X",
+    "pause": "Ctrl+Shift+P",
+    "human": "Ctrl+Shift+H",
+    "next_turn": "Ctrl+Shift+N"
+  },
+  "browser": {
+    "firefox_path": "",
+    "pipeline_test": false,
+    "reopen_last_url": false,
+    "last_urls": {}
+  },
+  "audio": {
+    "tts_engine": "sapi",
+    "voice": "",
+    "speed": 1.0,
+    "language": "auto",
+    "output_device": "",
+    "input_device": "",
+    "piper_executable": "",
+    "piper_model": "",
+    "whisper_model": "base",
+    "guard_ms": 700,
+    "manual_recording": false,
+    "isolated_routing_validated": false,
+    "echo_threshold": 0.6,
+    "vad": {"threshold_db": -42.0, "adaptive_margin_db": 12.0, "min_speech_ms": 250, "end_silence_ms": 1200, "max_utterance_s": 120, "frame_ms": 30}
+  },
+  "demo": {
+    "scenario": "normal",
+    "think_seconds": 0.8,
+    "stream_seconds": 1.6
+  }
+}

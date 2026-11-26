@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<title>Local mock chat – EMERGENCE LAB</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; font: 14px/1.5 "Segoe UI", system-ui, sans-serif; background: #0f1418; color: #d7dee4; }
+  header { padding: 10px 16px; border-bottom: 1px solid #26313a; display: flex; justify-content: space-between; }
+  header b { letter-spacing: .08em; color: #46d3b6; }
+  .warn { color: #e8b04b; font-size: 12px; }
+  main { max-width: 820px; margin: 0 auto; padding: 16px; }
+  #log { min-height: 50vh; }
+  article { padding: 10px 12px; margin: 10px 0; border-left: 3px solid #3a4651; background: #151c22; white-space: normal; }
+  article[data-role="assistant"] { border-left-color: #46d3b6; }
+  article[data-role="user"] { border-left-color: #7ea6ff; }
+  .msg-actions { margin-top: 6px; }
+  .msg-actions button { font-size: 11px; }
+  form { display: flex; gap: 8px; position: sticky; bottom: 0; background: #0f1418; padding: 10px 0; }
+  textarea { flex: 1; min-height: 60px; background: #151c22; color: inherit; border: 1px solid #2a353f; padding: 8px; }
+  button { background: #1b252d; color: inherit; border: 1px solid #33414c; padding: 6px 14px; cursor: pointer; }
+  button[disabled] { opacity: .4; cursor: default; }
+  #login-wall { padding: 30px; text-align: center; border: 1px dashed #e8b04b; }
+  [role="alert"] { color: #ff8a80; padding: 8px; border: 1px solid #ff8a80; margin: 8px 0; }
+  pre { background: #0b1013; padding: 8px; overflow: auto; }
+</style>
+</head>
+<body>
+<header><b>LOCAL MOCK CHAT</b><span class="warn">Test page shipped with EMERGENCE LAB – not an AI, no network access</span></header>
+<main>
+  <div id="login-wall" hidden>Please <a href="#login">log in</a> to continue. <button type="button" id="do-login">Log in (mock)</button></div>
+  <div id="alerts"></div>
+  <div id="log" role="log" aria-live="polite"></div>
+  <form id="composer" onsubmit="return false">
+    <textarea id="prompt" aria-label="Message" placeholder="Send a message"></textarea>
+    <button type="button" data-testid="send" aria-label="Send" disabled>Send</button>
+    <button type="button" data-testid="stop" aria-label="Stop" hidden>Stop</button>
+  </form>
+</main>
+<script>
+(() => {
+  const params = new URLSearchParams(location.search);
+  const speed = params.get('speed') === 'fast' ? 15 : 60;
+  const ignore = params.get('ignore') === '1';
+  const rateLimitAfter = params.has('ratelimit') ? Number(params.get('ratelimit')) : -1;
+  const log = document.getElementById('log');
+  const prompt = document.getElementById('prompt');
+  const send = document.querySelector('[data-testid="send"]');
+  const stop = document.querySelector('[data-testid="stop"]');
+  const wall = document.getElementById('login-wall');
+  let nextId = 1, replies = 0, timer = null, streaming = null;
+
+  if (params.get('login') === '1') { wall.hidden = false; document.getElementById('composer').hidden = true; }
+  document.getElementById('do-login').onclick = () => { wall.hidden = true; document.getElementById('composer').hidden = false; };
+
+  const addMessage = (role, text) => {
+    const a = document.createElement('article');
+    a.dataset.role = role;
+    a.dataset.messageId = 'm' + (nextId++);
+    const p = document.createElement('p');
+    p.textContent = text;
+    a.appendChild(p);
+    log.appendChild(a);
+    return a;
+  };
+  const finish = (a) => {
+    a.dataset.streaming = 'false';
+    const actions = document.createElement('div');
+    actions.className = 'msg-actions';
+    const copy = document.createElement('button');
+    copy.type = 'button'; copy.textContent = 'Copy'; copy.setAttribute('aria-label', 'Copy');
+    actions.appendChild(copy);
+    a.appendChild(actions);
+    stop.hidden = true; streaming = null; timer = null;
+    send.disabled = !prompt.value.trim();
+  };
+  const compose = (received) => {
+    replies += 1;
+    const words = received.trim().split(/\s+/).slice(0, 8).join(' ');
+    const lines = [
+      'Mock reply #' + replies + ': I received ' + received.length + ' characters.',
+      'First words: ' + words,
+    ];
+    return lines;
+  };
+  const stream = (received) => {
+    const a = document.createElement('article');
+    a.dataset.role = 'assistant';
+    a.dataset.messageId = 'm' + (nextId++);
+    a.dataset.streaming = 'true';
+    log.appendChild(a);
+    stop.hidden = false;
+    streaming = a;
+    const lines = compose(received);
+    const p1 = document.createElement('p'); a.appendChild(p1);
+    const tokens = lines[0].split(' ');
+    let i = 0;
+    const extra = () => {
+      const p2 = document.createElement('p'); p2.textContent = lines[1]; a.appendChild(p2);
+      const ul = document.createElement('ul');
+      for (const item of ['first point', 'second point']) { const li = document.createElement('li'); li.textContent = item; ul.appendChild(li); }
+      a.appendChild(ul);
+      if (/code/i.test(received)) {
+        const pre = document.createElement('pre'); const code = document.createElement('code');
+        code.className = 'language-python'; code.textContent = 'def hello():\n    return "world"';
+        pre.appendChild(code); a.appendChild(pre);
+      }
+      const p3 = document.createElement('p'); p3.append('Inline ');
+      const c = document.createElement('code'); c.textContent = 'x = 1'; p3.append(c); p3.append(' done.');
+      a.appendChild(p3);
+    };
+    timer = setInterval(() => {
+      if (i < tokens.length) { p1.textContent = tokens.slice(0, ++i).join(' '); return; }
+      clearInterval(timer);
+      extra();
+      setTimeout(() => finish(a), speed * 3);
+    }, speed);
+  };
+  const submit = () => {
+    const text = prompt.value;
+    if (!text.trim() || streaming) return;
+    if (ignore) return;               // simulates a swallowed submission
+    addMessage('user', text);
+    prompt.value = '';
+    send.disabled = true;
+    if (rateLimitAfter >= 0 && replies >= rateLimitAfter) {
+      const al = document.createElement('div'); al.setAttribute('role', 'alert');
+      al.textContent = "You've reached the mock rate limit. Try again later.";
+      document.getElementById('alerts').appendChild(al);
+      return;
+    }
+    setTimeout(() => stream(text), speed * 2);
+  };
+  prompt.addEventListener('input', () => { send.disabled = !prompt.value.trim() || !!streaming; });
+  prompt.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } });
+  send.addEventListener('click', submit);
+  stop.addEventListener('click', () => {
+    if (!streaming) return;
+    clearInterval(timer);
+    finish(streaming);
+  });
+  const existing = Number(params.get('existing') || 0);
+  for (let k = 1; k <= existing; k++) {
+    addMessage('user', 'Earlier question ' + k);
+    const a = addMessage('assistant', 'Earlier answer ' + k + ' from an existing conversation.');
+    finish(a);
+  }
+})();
+</script>
+</body>
+</html>

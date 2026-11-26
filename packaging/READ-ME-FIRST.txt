@@ -1,0 +1,43 @@
+﻿EMERGENCE LAB – AI Conversation Bridge 0.1.1 · portable Windows x64
+Built by Frank G – IBM Certified AI Developer
+=====================================================================
+
+START
+  1. Extract the WHOLE ZIP to a folder of your choice (do not start it from inside the ZIP).
+  2. Double-click EmergenceLab.exe.
+  Nothing is installed. No administrator rights, no Python and no Node.js are needed.
+
+WINDOWS SMARTSCREEN
+  The program is not code-signed. On first start Windows may show "Windows protected your PC":
+  click "More info" -> "Run anyway". Alternatively, before extracting: right-click the ZIP ->
+  Properties -> tick "Unblock" -> OK.
+
+WHAT WORKS IMMEDIATELY
+  * Demo mode (simulated participants, no accounts)
+  * Clipboard mode with your installed Firefox (dedicated profiles, no automation)
+
+OPTIONAL
+  * Automated browser adapters need Playwright's own Firefox build (about 80-100 MB):
+    Settings -> Browser & windows -> Browser runtime -> Install.
+  * Audio companion mode: use the "-audio" variant of this ZIP.
+
+YOUR DATA
+  Settings, research database, logs, exports, dedicated browser profiles and the optional browser
+  runtime are stored OUTSIDE this folder, in %LOCALAPPDATA%\EmergenceLab.
+  Portable data mode (e.g. USB stick): create an empty file named "EmergenceLab.portable" next to
+  EmergenceLab.exe – data then goes to the folder "EmergenceLab-Data" NEXT TO this folder.
+  Updating = replace this folder; your data stays. Your normal Firefox profile is never touched.
+
+DIAGNOSTICS
+  EmergenceLab-console.exe --self-check       core check without GUI
+  EmergenceLab-console.exe --gui-selftest     GUI smoke test (temporary data folder)
+  Log file: %LOCALAPPDATA%\EmergenceLab\logs\emergence-lab.log
+
+---------------------------------------------------------------------
+KURZANLEITUNG (DEUTSCH)
+  1. Das GANZE ZIP entpacken und EmergenceLab.exe doppelklicken – keine Installation,
+     keine Administratorrechte, kein Python, kein Node.js nötig.
+  2. SmartScreen-Warnung: "Weitere Informationen" -> "Trotzdem ausführen" (Programm ist nicht signiert).
+  3. Sofort nutzbar: Demo-Modus und Clipboard-Modus mit deinem installierten Firefox.
+  4. Optional: Playwright-Firefox für Automatisierung unter Settings -> Browser & windows -> Browser runtime.
+  5. Daten liegen außerhalb dieses Ordners in %LOCALAPPDATA%\EmergenceLab. Update = Ordner ersetzen.

@@ -1,0 +1,539 @@
+{
+  "schema_version": 1,
+  "_comment": "Selector CANDIDATES. Except for 'mock', none of these were validated against the live websites during development (no account access). Each list is tried in order. Prefer semantic attributes and roles. Local overrides: <data dir>/providers.user.json (edit via Settings > Providers). Syntax: CSS | role:<role>[:<name regex>] | text:<regex> | xpath=<expr>.",
+  "generic": {
+    "selectors": {
+      "input": [
+        "textarea",
+        "div[contenteditable=\"true\"][role=\"textbox\"]",
+        "div[contenteditable=\"true\"]",
+        "role:textbox"
+      ],
+      "send_button": [
+        "button[type=\"submit\"]",
+        "button[aria-label*=\"Send\" i]",
+        "button[aria-label*=\"Senden\" i]",
+        "button[aria-label*=\"Envoyer\" i]",
+        "role:button:^(send|senden|envoyer|submit)"
+      ],
+      "assistant_message": [
+        "[data-message-author-role=\"assistant\"]",
+        "[data-role=\"assistant\"]",
+        "[data-author=\"assistant\"]",
+        ".assistant-message",
+        ".markdown",
+        ".prose"
+      ],
+      "user_message": [
+        "[data-message-author-role=\"user\"]",
+        "[data-role=\"user\"]",
+        ".user-message"
+      ],
+      "generating": [
+        "button[aria-label*=\"Stop\" i]",
+        "button[aria-label*=\"Stopp\" i]",
+        "button[aria-label*=\"Arrêter\" i]"
+      ],
+      "stop_button": [
+        "button[aria-label*=\"Stop\" i]",
+        "button[aria-label*=\"Stopp\" i]",
+        "button[aria-label*=\"Arrêter\" i]"
+      ],
+      "completion_indicator": [],
+      "login_required": [],
+      "error_banner": [
+        "[role=\"alert\"]"
+      ]
+    },
+    "extract_exclude": [
+      "button",
+      "[aria-hidden=\"true\"]",
+      ".sr-only",
+      "[data-exclude-from-copy]",
+      "svg"
+    ],
+    "rate_limit_text_patterns": [
+      "rate limit",
+      "too many requests",
+      "usage limit",
+      "you've reached",
+      "you have reached",
+      "limit reached",
+      "try again later",
+      "zu viele anfragen",
+      "limite atteinte",
+      "trop de requêtes"
+    ]
+  },
+  "providers": {
+    "chatgpt": {
+      "label": "ChatGPT",
+      "kind": "browser",
+      "url": "https://chatgpt.com/",
+      "host_patterns": [
+        "chatgpt.com",
+        "chat.openai.com"
+      ],
+      "inherit_generic": true,
+      "selectors": {
+        "input": [
+          "#prompt-textarea",
+          "div#prompt-textarea[contenteditable=\"true\"]",
+          "textarea[name=\"prompt-textarea\"]"
+        ],
+        "send_button": [
+          "button[data-testid=\"send-button\"]",
+          "#composer-submit-button",
+          "button[aria-label*=\"Send prompt\" i]"
+        ],
+        "assistant_message": [
+          "[data-message-author-role=\"assistant\"]"
+        ],
+        "user_message": [
+          "[data-message-author-role=\"user\"]"
+        ],
+        "generating": [
+          "button[data-testid=\"stop-button\"]"
+        ],
+        "stop_button": [
+          "button[data-testid=\"stop-button\"]"
+        ],
+        "completion_indicator": [
+          "button[data-testid=\"copy-turn-action-button\"]",
+          "button[data-testid=\"good-response-turn-action-button\"]"
+        ],
+        "login_required": [
+          "button[data-testid=\"login-button\"]",
+          "a[href*=\"/auth/login\"]"
+        ],
+        "error_banner": [
+          "[role=\"alert\"]",
+          "[data-testid*=\"error\" i]"
+        ]
+      },
+      "message_id_attributes": [
+        "data-message-id"
+      ],
+      "login_url_patterns": [
+        "auth.openai.com",
+        "/auth/login",
+        "/log-in"
+      ],
+      "conversation_id_patterns": [
+        "/c/([0-9a-fA-F-]{8,})"
+      ],
+      "input_method": "fill",
+      "send_method": "click_or_enter",
+      "stability_ms": 1500,
+      "max_input_chars": 30000,
+      "automation": {
+        "policy": "review_terms",
+        "note": "OpenAI's consumer Terms of Use restrict automated or programmatic extraction of output from the ChatGPT interface. Review the current terms before enabling automated interaction. The clipboard mode involves no automation."
+      },
+      "validation": {
+        "status": "unvalidated",
+        "notes": "Candidates based on publicly known markup. Requires live validation with the adapter diagnostics."
+      }
+    },
+    "gemini": {
+      "label": "Gemini",
+      "kind": "browser",
+      "url": "https://gemini.google.com/app",
+      "host_patterns": [
+        "gemini.google.com"
+      ],
+      "inherit_generic": true,
+      "selectors": {
+        "input": [
+          "rich-textarea div.ql-editor[contenteditable=\"true\"]",
+          "div.ql-editor[contenteditable=\"true\"]",
+          "div[contenteditable=\"true\"][role=\"textbox\"]"
+        ],
+        "send_button": [
+          "button.send-button",
+          "button[aria-label*=\"Send message\" i]",
+          "button[aria-label*=\"Nachricht senden\" i]",
+          "button[aria-label*=\"Envoyer un message\" i]"
+        ],
+        "assistant_message": [
+          "model-response message-content",
+          "model-response .model-response-text",
+          "model-response"
+        ],
+        "user_message": [
+          "user-query",
+          ".user-query-container"
+        ],
+        "generating": [
+          "button[aria-label*=\"Stop response\" i]",
+          "button[aria-label*=\"Antwort stoppen\" i]",
+          "button[aria-label*=\"Arrêter la réponse\" i]",
+          "button.send-button.stop"
+        ],
+        "stop_button": [
+          "button[aria-label*=\"Stop response\" i]",
+          "button[aria-label*=\"Antwort stoppen\" i]",
+          "button[aria-label*=\"Arrêter la réponse\" i]"
+        ],
+        "completion_indicator": [
+          "model-response message-actions",
+          "model-response button[aria-label*=\"Copy\" i]",
+          "model-response button[aria-label*=\"Kopieren\" i]"
+        ],
+        "login_required": [
+          "a[href*=\"accounts.google.com/ServiceLogin\"]",
+          "a[aria-label*=\"Sign in\" i]",
+          "a[aria-label*=\"Anmelden\" i]",
+          "a[aria-label*=\"Connexion\" i]"
+        ],
+        "error_banner": [
+          "[role=\"alert\"]",
+          "snack-bar-container"
+        ]
+      },
+      "message_id_attributes": [
+        "data-response-id",
+        "id"
+      ],
+      "login_url_patterns": [
+        "accounts.google.com"
+      ],
+      "conversation_id_patterns": [
+        "/app/([0-9a-f]{8,})"
+      ],
+      "input_method": "fill",
+      "send_method": "click_or_enter",
+      "stability_ms": 2000,
+      "max_input_chars": 30000,
+      "automation": {
+        "policy": "review_terms",
+        "note": "Google may refuse sign-in in automated browsers ('This browser or app may not be secure'). This application does not work around that. If sign-in is refused, use the standard Firefox backend with the clipboard mode. Review Google's terms before automating."
+      },
+      "validation": {
+        "status": "unvalidated",
+        "notes": "Candidates based on publicly known markup. Google sign-in inside Playwright's Firefox is likely to be refused."
+      }
+    },
+    "claude": {
+      "label": "Claude",
+      "kind": "browser",
+      "url": "https://claude.ai/new",
+      "host_patterns": [
+        "claude.ai"
+      ],
+      "inherit_generic": true,
+      "selectors": {
+        "input": [
+          "div[contenteditable=\"true\"].ProseMirror",
+          "[data-testid=\"chat-input\"]",
+          "fieldset div[contenteditable=\"true\"]"
+        ],
+        "send_button": [
+          "button[aria-label=\"Send message\"]",
+          "button[aria-label*=\"Send\" i]",
+          "button[aria-label*=\"Nachricht senden\" i]",
+          "button[aria-label*=\"Envoyer\" i]"
+        ],
+        "assistant_message": [
+          "div[data-is-streaming]",
+          ".font-claude-response",
+          ".font-claude-message"
+        ],
+        "user_message": [
+          "[data-testid=\"user-message\"]"
+        ],
+        "generating": [
+          "div[data-is-streaming=\"true\"]",
+          "button[aria-label=\"Stop response\"]",
+          "button[aria-label*=\"Stop\" i]"
+        ],
+        "stop_button": [
+          "button[aria-label=\"Stop response\"]",
+          "button[aria-label*=\"Stop\" i]",
+          "button[aria-label*=\"Stopp\" i]"
+        ],
+        "completion_indicator": [
+          "button[data-testid=\"action-bar-copy\"]"
+        ],
+        "login_required": [
+          "input[type=\"email\"]",
+          "button[data-testid=\"login-with-google\"]"
+        ],
+        "error_banner": [
+          "[role=\"alert\"]"
+        ]
+      },
+      "message_id_attributes": [
+        "data-message-id"
+      ],
+      "login_url_patterns": [
+        "/login",
+        "/magic-link"
+      ],
+      "conversation_id_patterns": [
+        "/chat/([0-9a-fA-F-]{36})"
+      ],
+      "input_method": "fill",
+      "send_method": "click_or_enter",
+      "stability_ms": 1500,
+      "max_input_chars": 30000,
+      "automation": {
+        "policy": "review_terms",
+        "note": "Anthropic's consumer terms restrict accessing the Claude apps through automated or non-human means (API keys are the supported route). Review the current terms; the clipboard mode involves no automation."
+      },
+      "validation": {
+        "status": "unvalidated",
+        "notes": "Candidates based on publicly known markup. Requires live validation."
+      }
+    },
+    "grok": {
+      "label": "Grok",
+      "kind": "browser",
+      "url": "https://grok.com/",
+      "host_patterns": [
+        "grok.com",
+        "x.com"
+      ],
+      "inherit_generic": true,
+      "selectors": {
+        "input": [
+          "textarea[aria-label*=\"Grok\" i]",
+          "div[contenteditable=\"true\"]",
+          "textarea"
+        ],
+        "send_button": [
+          "button[type=\"submit\"][aria-label*=\"Submit\" i]",
+          "button[aria-label*=\"Submit\" i]",
+          "button[type=\"submit\"]"
+        ],
+        "assistant_message": [
+          "[data-testid=\"assistant-message\"]",
+          "div[id^=\"response-\"] .message-bubble",
+          ".response-content-markdown"
+        ],
+        "user_message": [
+          "[data-testid=\"user-message\"]"
+        ],
+        "generating": [
+          "button[aria-label*=\"Stop\" i]"
+        ],
+        "stop_button": [
+          "button[aria-label*=\"Stop\" i]"
+        ],
+        "completion_indicator": [],
+        "login_required": [
+          "a[href*=\"/sign-in\"]",
+          "a[href*=\"login\"]"
+        ],
+        "error_banner": [
+          "[role=\"alert\"]"
+        ]
+      },
+      "message_id_attributes": [
+        "id"
+      ],
+      "login_url_patterns": [
+        "/sign-in",
+        "accounts.x.ai"
+      ],
+      "conversation_id_patterns": [
+        "/c/([A-Za-z0-9-]{6,})",
+        "/chat/([A-Za-z0-9-]{6,})"
+      ],
+      "input_method": "fill",
+      "send_method": "click_or_enter",
+      "stability_ms": 2000,
+      "max_input_chars": 25000,
+      "automation": {
+        "policy": "review_terms",
+        "note": "Review xAI's current terms before enabling automated interaction."
+      },
+      "validation": {
+        "status": "unvalidated",
+        "notes": "Low-confidence candidates. Markup not verified – run the diagnostics and update locally."
+      }
+    },
+    "mistral": {
+      "label": "Mistral Le Chat",
+      "kind": "browser",
+      "url": "https://chat.mistral.ai/chat",
+      "host_patterns": [
+        "chat.mistral.ai"
+      ],
+      "inherit_generic": true,
+      "selectors": {
+        "input": [
+          "textarea[name=\"message.text\"]",
+          "div[contenteditable=\"true\"]",
+          "textarea"
+        ],
+        "send_button": [
+          "button[aria-label*=\"Send\" i]",
+          "button[type=\"submit\"]"
+        ],
+        "assistant_message": [
+          "[data-message-author-role=\"assistant\"]",
+          "div[data-message-part-type=\"answer\"]",
+          ".prose"
+        ],
+        "user_message": [
+          "[data-message-author-role=\"user\"]"
+        ],
+        "generating": [
+          "button[aria-label*=\"Stop\" i]"
+        ],
+        "stop_button": [
+          "button[aria-label*=\"Stop\" i]"
+        ],
+        "completion_indicator": [],
+        "login_required": [
+          "a[href*=\"/login\"]",
+          "a[href*=\"auth\"]"
+        ],
+        "error_banner": [
+          "[role=\"alert\"]"
+        ]
+      },
+      "message_id_attributes": [
+        "data-message-id",
+        "id"
+      ],
+      "login_url_patterns": [
+        "/login",
+        "auth.mistral.ai"
+      ],
+      "conversation_id_patterns": [
+        "/chat/([0-9a-fA-F-]{36})"
+      ],
+      "input_method": "fill",
+      "send_method": "click_or_enter",
+      "stability_ms": 1800,
+      "max_input_chars": 25000,
+      "automation": {
+        "policy": "review_terms",
+        "note": "Review Mistral AI's current terms before enabling automated interaction."
+      },
+      "validation": {
+        "status": "unvalidated",
+        "notes": "Low-confidence candidates. Markup not verified."
+      }
+    },
+    "vibe": {
+      "label": "Vibe",
+      "kind": "browser",
+      "url": "",
+      "url_editable": true,
+      "host_patterns": [],
+      "inherit_generic": true,
+      "selectors": {},
+      "input_method": "fill",
+      "send_method": "click_or_enter",
+      "stability_ms": 2000,
+      "automation": {
+        "policy": "review_terms",
+        "note": "Enter the website URL. Generic selectors are used until you configure provider-specific ones."
+      },
+      "validation": {
+        "status": "unvalidated",
+        "notes": "No URL or markup known. Configure locally and validate with the diagnostics."
+      }
+    },
+    "custom": {
+      "label": "Custom",
+      "kind": "browser",
+      "url": "",
+      "url_editable": true,
+      "host_patterns": [],
+      "inherit_generic": true,
+      "selectors": {},
+      "input_method": "fill",
+      "send_method": "click_or_enter",
+      "stability_ms": 2000,
+      "automation": {
+        "policy": "review_terms",
+        "note": "Custom website: only automate sites whose terms permit it."
+      },
+      "validation": {
+        "status": "unvalidated",
+        "notes": "Generic selectors. Configure locally."
+      }
+    },
+    "companion": {
+      "label": "Animated Companion",
+      "kind": "audio",
+      "url": "",
+      "url_editable": true,
+      "host_patterns": [],
+      "inherit_generic": false,
+      "selectors": {},
+      "automation": {
+        "policy": "user_controlled",
+        "note": "Audio mode: Cameron's text is spoken via local TTS; the companion's voice is captured from the input you select and transcribed locally. Every transcript is shown for confirmation before it is forwarded."
+      },
+      "validation": {
+        "status": "experimental",
+        "notes": "Experimental until verified with a real companion."
+      }
+    },
+    "mock": {
+      "label": "Local mock page",
+      "kind": "browser",
+      "url": "@app/assets/mock_chat.html",
+      "host_patterns": [
+        "mock_chat.html"
+      ],
+      "inherit_generic": false,
+      "selectors": {
+        "input": [
+          "#prompt",
+          "textarea[aria-label*=\"message\" i]"
+        ],
+        "send_button": [
+          "button[data-testid=\"send\"]",
+          "role:button:^send$"
+        ],
+        "assistant_message": [
+          "article[data-role=\"assistant\"]"
+        ],
+        "user_message": [
+          "article[data-role=\"user\"]"
+        ],
+        "generating": [
+          "button[data-testid=\"stop\"]:not([hidden])",
+          "[data-streaming=\"true\"]"
+        ],
+        "stop_button": [
+          "button[data-testid=\"stop\"]:not([hidden])"
+        ],
+        "completion_indicator": [
+          "article[data-role=\"assistant\"] .msg-actions"
+        ],
+        "login_required": [
+          "#login-wall:not([hidden])"
+        ],
+        "error_banner": [
+          "[role=\"alert\"]"
+        ]
+      },
+      "message_id_attributes": [
+        "data-message-id"
+      ],
+      "login_url_patterns": [],
+      "conversation_id_patterns": [
+        "[?&]conv=([A-Za-z0-9-]+)"
+      ],
+      "input_method": "fill",
+      "send_method": "click",
+      "stability_ms": 600,
+      "max_input_chars": 50000,
+      "automation": {
+        "policy": "allowed",
+        "note": "Local test page shipped with the application. Not an AI."
+      },
+      "validation": {
+        "status": "validated",
+        "notes": "Validated by the automated test-suite."
+      }
+    }
+  }
+}
