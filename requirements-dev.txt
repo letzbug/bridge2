@@ -1,0 +1,2 @@
+# Optional: run the automated tests (pytest tests)
+pytest>=8

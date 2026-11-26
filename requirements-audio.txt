@@ -1,0 +1,4 @@
+# Optional: Animated Companion audio mode (installed by install_audio.bat)
+numpy>=1.26
+sounddevice>=0.4.6
+faster-whisper>=1.0.3

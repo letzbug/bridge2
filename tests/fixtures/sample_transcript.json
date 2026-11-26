@@ -1,0 +1,116 @@
+{
+  "format": "emergence-lab-transcript",
+  "schema_version": 1,
+  "generator": "EMERGENCE LAB – Conversation Bridge 0.1.0",
+  "simulated": false,
+  "meta": {
+    "session_id": "4056d207e0f1",
+    "title": "Dreams & <memory>",
+    "research_question": "",
+    "topic": "dreaming",
+    "started_at": "2026-11-25T15:32:06+01:00",
+    "ended_at": null,
+    "end_state": null,
+    "host_name": "Cameron",
+    "host_provider": "ChatGPT",
+    "guest_name": "Gem",
+    "guest_provider": "Gemini",
+    "transfer_mode": "manual",
+    "template_mode": "attributed",
+    "transfer_template": "",
+    "initial_prompt": "",
+    "first_speaker": "host",
+    "max_rounds": 10,
+    "demo": false,
+    "notes": "",
+    "experiment": "",
+    "condition": "",
+    "facts": {
+      "guest_model": {
+        "value": "Gemini 3 (user-reported)",
+        "provenance": "user_reported"
+      },
+      "host_conversation_id": {
+        "value": "abc",
+        "provenance": "observed"
+      },
+      "guest_memory": {
+        "value": null,
+        "provenance": "unavailable"
+      }
+    }
+  },
+  "entries": [
+    {
+      "turn": 1,
+      "round": 1,
+      "kind": "initial_prompt",
+      "speaker_role": "operator",
+      "speaker_name": "Operator",
+      "provider": "—",
+      "timestamp": "2026-11-25T14:00:00+01:00",
+      "original_text": "Hello",
+      "destination": "host",
+      "destination_name": "Cameron",
+      "forwarded_text": "Hello",
+      "transfer_status": "sent",
+      "edited": false,
+      "duration_s": null,
+      "message_hash": "",
+      "message_id": null,
+      "confidence": null,
+      "simulated": false,
+      "flags": []
+    },
+    {
+      "turn": 2,
+      "round": 1,
+      "kind": "response",
+      "speaker_role": "host",
+      "speaker_name": "Cameron",
+      "provider": "ChatGPT",
+      "timestamp": "2026-11-25T14:00:10+01:00",
+      "original_text": "<script>alert(\"x\")</script><img src=x onerror=\"alert(1)\"> [click](javascript:alert(1)) ``` </div><iframe src=\"https://evil.example\"></iframe> =HYPERLINK(\"http://evil\",\"x\")",
+      "destination": "guest",
+      "destination_name": "Gem",
+      "forwarded_text": "Message from Cameron:\n\n<script>alert(\"x\")</script><img src=x onerror=\"alert(1)\"> [click](javascript:alert(1)) ``` </div><iframe src=\"https://evil.example\"></iframe> =HYPERLINK(\"http://evil\",\"x\")",
+      "transfer_status": "sent",
+      "edited": false,
+      "duration_s": 3.2,
+      "message_hash": "",
+      "message_id": null,
+      "confidence": null,
+      "simulated": false,
+      "flags": []
+    },
+    {
+      "turn": 3,
+      "round": 1,
+      "kind": "human_intervention",
+      "speaker_role": "human",
+      "speaker_name": "Human researcher",
+      "provider": "—",
+      "timestamp": "2026-11-25T14:01:00+01:00",
+      "original_text": "Please slow down.",
+      "destination": "guest",
+      "destination_name": "Gem",
+      "forwarded_text": "Please slow down.",
+      "transfer_status": "sent",
+      "edited": false,
+      "duration_s": null,
+      "message_hash": "",
+      "message_id": null,
+      "confidence": null,
+      "simulated": false,
+      "flags": []
+    }
+  ],
+  "events": [
+    {
+      "timestamp": "2026-11-25T15:32:06+01:00",
+      "level": "warning",
+      "code": "loop_detected",
+      "message": "Turn 2: <b>near duplicate</b>"
+    }
+  ]
+}
